@@ -5,13 +5,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -19,51 +22,24 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE user SET deleted = true, deleted_at = now() WHERE id = ?")
 @SQLRestriction("deleted = false")
 @Table(name = "user")
-public class User extends BaseEntity{
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
+public class User extends BaseEntity implements UserDetails {
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "birth_date", nullable = false)
-    private SimpleDateFormat birthDate;
-    @Column(name = "phone_number", nullable = false)
-    private String phoneNumber;
-
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user")
-    private List<PreviousPassword> previousPasswords;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String password, Role role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String email, String password, Role role) {
         this.email = email;
         this.password = password;
         this.role = role;
-    }
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -72,10 +48,6 @@ public class User extends BaseEntity{
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
@@ -90,11 +62,17 @@ public class User extends BaseEntity{
         this.role = role;
     }
 
-    public List<PreviousPassword> getPreviousPasswords() {
-        return previousPasswords;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    public void setPreviousPasswords(List<PreviousPassword> previousPasswords) {
-        this.previousPasswords = previousPasswords;
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 }

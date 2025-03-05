@@ -18,6 +18,6 @@ public class PreviousPassword extends BaseEntity{
     @Column(name = "password", nullable = false)
     private String password;
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "user_details_id", nullable = false)
+    private UserInfo userInfo;
 }
