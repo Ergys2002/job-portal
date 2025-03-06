@@ -1,13 +1,15 @@
 package com.exh.jobseeker.model.entity;
 
 
+import com.exh.jobseeker.model.enums.Gender;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +23,9 @@ public class UserInfo extends BaseEntity{
     private Date birthDate;
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
+    @Column(name = "gender", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     @OneToMany(mappedBy = "userInfo")
     private List<PreviousPassword> previousPasswords;
 
@@ -31,11 +36,12 @@ public class UserInfo extends BaseEntity{
     public UserInfo() {
     }
 
-    public UserInfo(String firstName, String lastName, Date birthDate, String phoneNumber) {
+    public UserInfo(String firstName, String lastName, Date birthDate, String phoneNumber, Gender gender) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
+        this.gender = gender;
     }
 
     public String getFirstName() {
@@ -84,5 +90,13 @@ public class UserInfo extends BaseEntity{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 }

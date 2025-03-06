@@ -1,8 +1,10 @@
 package com.exh.jobseeker.controller;
 
 import com.exh.jobseeker.model.dto.request.AuthenticationRequest;
+import com.exh.jobseeker.model.dto.request.RegisterRequest;
 import com.exh.jobseeker.model.dto.request.TokenRefreshRequest;
 import com.exh.jobseeker.model.dto.response.AuthenticationResponse;
+import com.exh.jobseeker.model.dto.response.RegisterResponse;
 import com.exh.jobseeker.model.dto.response.TokenRefreshResponse;
 import com.exh.jobseeker.service.AuthenticationService;
 import jakarta.validation.Valid;
@@ -29,6 +31,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticateUser(@Valid @RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authService.authenticate(request));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisterResponse> registerJobSeeker(@Valid @RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/refresh-token")
