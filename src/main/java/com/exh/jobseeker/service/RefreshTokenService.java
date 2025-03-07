@@ -1,6 +1,7 @@
 package com.exh.jobseeker.service;
 
 import com.exh.jobseeker.config.JwtService;
+import com.exh.jobseeker.exception.TokenNotFoundException;
 import com.exh.jobseeker.exception.TokenRefreshException;
 import com.exh.jobseeker.model.entity.RefreshToken;
 import com.exh.jobseeker.model.entity.User;
@@ -11,12 +12,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+
 @Service
 public class RefreshTokenService {
-
+    private static final int MAX_ACTIVE_SESSIONS_PER_USER = 5;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -39,11 +43,21 @@ public class RefreshTokenService {
             throw new RuntimeException("User not found with email: " + userEmail);
         }
 
-        refreshTokenRepository.revokeAllUserTokens(user);
+        List<RefreshToken> activeTokens = refreshTokenRepository.findActiveTokensByUser(user, Instant.now());
+        if (activeTokens.size() >= MAX_ACTIVE_SESSIONS_PER_USER) {
+            activeTokens.stream()
+                    .min(Comparator.comparing(RefreshToken::getCreatedAt))
+                    .ifPresent(token -> {
+                        token.setRevoked(true);
+                        refreshTokenRepository.save(token);
+                    });
+        }
+
+        String refreshTokenString = UUID.randomUUID().toString();
 
         RefreshToken refreshToken = RefreshToken.builder()
                 .user(user)
-                .token(UUID.randomUUID().toString())
+                .token(refreshTokenString)
                 .expiryDate(Instant.now().plusMillis(jwtService.getRefreshTokenExpiration()))
                 .revoked(false)
                 .build();
@@ -84,11 +98,24 @@ public class RefreshTokenService {
     }
 
     @Transactional
+    public void revokeTokenById(UUID tokenId) {
+        RefreshToken refreshToken = refreshTokenRepository.findById(tokenId)
+                .orElseThrow(() -> new TokenNotFoundException("Refresh token not found with id: " + tokenId));
+
+        refreshToken.setRevoked(true);
+        refreshTokenRepository.save(refreshToken);
+    }
+    @Transactional
     public void revokeAllUserTokens(User user) {
         refreshTokenRepository.revokeAllUserTokens(user);
     }
 
+    public List<RefreshToken> getActiveTokensByUser(User user) {
+        return refreshTokenRepository.findActiveTokensByUser(user, Instant.now());
+    }
+
     @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
     public void cleanupExpiredTokens() {
         refreshTokenRepository.deleteAllExpiredTokens(Instant.now());
     }

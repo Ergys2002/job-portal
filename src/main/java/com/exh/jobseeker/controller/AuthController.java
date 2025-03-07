@@ -7,6 +7,7 @@ import com.exh.jobseeker.model.dto.response.AuthenticationResponse;
 import com.exh.jobseeker.model.dto.response.RegisterResponse;
 import com.exh.jobseeker.model.dto.response.TokenRefreshResponse;
 import com.exh.jobseeker.service.AuthenticationService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +35,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> registerJobSeeker(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 

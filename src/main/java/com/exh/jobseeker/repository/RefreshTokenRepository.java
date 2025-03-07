@@ -6,30 +6,31 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
+public interface RefreshTokenRepository extends JpaRepository<RefreshToken, UUID> {
     Optional<RefreshToken> findByToken(String token);
 
-    @Modifying
-    @Transactional
-    @Query("DELETE FROM RefreshToken rt WHERE rt.user = ?1")
-    void deleteByUser(User user);
+    List<RefreshToken> findAllByUser(User user);
 
     @Modifying
-    @Transactional
-    @Query("UPDATE RefreshToken rt SET rt.revoked = true WHERE rt.user = ?1 AND rt.revoked = false")
-    void revokeAllUserTokens(User user);
+    @Query("UPDATE RefreshToken rt SET rt.revoked = true WHERE rt.user = :user AND rt.revoked = false")
+    void revokeAllUserTokens(@Param("user") User user);
 
     @Modifying
-    @Transactional
-    @Query("DELETE FROM RefreshToken rt WHERE rt.expiryDate < ?1")
-    void deleteAllExpiredTokens(Instant now);
+    @Query("DELETE FROM RefreshToken rt WHERE rt.expiryDate < :now")
+    void deleteAllExpiredTokens(@Param("now") Instant now);
 
-    List<RefreshToken> findAllByUserAndRevokedFalse(User user);
+    @Query("SELECT r FROM RefreshToken r WHERE r.user = :user AND r.revoked = false AND r.expiryDate > :now")
+    List<RefreshToken> findActiveTokensByUser(@Param("user") User user, @Param("now") Instant now);
+
+    @Query("SELECT COUNT(r) FROM RefreshToken r WHERE r.user = :user AND r.revoked = false AND r.expiryDate > :now")
+    long countActiveTokensByUser(@Param("user") User user, @Param("now") Instant now);
 }

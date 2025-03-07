@@ -1,6 +1,7 @@
 package com.exh.jobseeker.model.dto.request;
 
 import com.exh.jobseeker.model.enums.Gender;
+import com.exh.jobseeker.model.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,10 +16,9 @@ public class RegisterRequest {
     private String email;
 
     @NotBlank(message = "Password should not be blank")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$",
-            message = "Password should contain at least one uppercase letter, one lowercase letter, one digit and be at least 8 characters long")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@#$%^&+=!?_\\-\\[\\]{}()<>,.;:'\\\"\\/\\\\|]).*$",
+            message = "Password must contain at least one letter, one digit, and one special character")
     private String password;
-
     @NotBlank(message = "First name should not be blank")
     private String firstName;
 
@@ -32,6 +32,8 @@ public class RegisterRequest {
     @NotBlank(message = "Phone number should not be blank")
     @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Phone number must be valid")
     private String phoneNumber;
+
+    private Role role;
 
     @NotNull(message = "Gender should not be null")
     private Gender gender;
@@ -62,5 +64,9 @@ public class RegisterRequest {
 
     public Gender getGender() {
         return gender;
+    }
+
+    public Role getRole() {
+        return role;
     }
 }

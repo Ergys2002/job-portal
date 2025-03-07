@@ -1,28 +1,41 @@
 package com.exh.jobseeker.service;
 
 import com.exh.jobseeker.config.JwtService;
+import com.exh.jobseeker.exception.AccessDeniedException;
 import com.exh.jobseeker.exception.EmailAlreadyExistsException;
+import com.exh.jobseeker.exception.InvalidCredentialsException;
 import com.exh.jobseeker.exception.PhoneNumberAlreadyExistsException;
+import com.exh.jobseeker.exception.SessionNotFoundException;
 import com.exh.jobseeker.exception.TokenRefreshException;
 import com.exh.jobseeker.model.dto.request.AuthenticationRequest;
 import com.exh.jobseeker.model.dto.request.RegisterRequest;
 import com.exh.jobseeker.model.dto.request.TokenRefreshRequest;
 import com.exh.jobseeker.model.dto.response.AuthenticationResponse;
+import com.exh.jobseeker.model.dto.response.DeviceSessionDto;
 import com.exh.jobseeker.model.dto.response.RegisterResponse;
 import com.exh.jobseeker.model.dto.response.TokenRefreshResponse;
 import com.exh.jobseeker.model.entity.RefreshToken;
 import com.exh.jobseeker.model.entity.User;
 import com.exh.jobseeker.model.entity.UserInfo;
 import com.exh.jobseeker.model.enums.Role;
+import com.exh.jobseeker.repository.RefreshTokenRepository;
 import com.exh.jobseeker.repository.UserInfoRepository;
 import com.exh.jobseeker.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthenticationService {
@@ -31,16 +44,27 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
     private final UserInfoRepository userInfoRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    public AuthenticationService(UserRepository userRepository, JwtService jwtService, AuthenticationManager authenticationManager, RefreshTokenService refreshTokenService, UserInfoRepository userInfoRepository) {
+    public AuthenticationService(
+            UserRepository userRepository,
+            JwtService jwtService,
+            AuthenticationManager authenticationManager,
+            RefreshTokenService refreshTokenService,
+            UserInfoRepository userInfoRepository,
+            PasswordEncoder passwordEncoder,
+            RefreshTokenRepository refreshTokenRepository
+    ) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.refreshTokenService = refreshTokenService;
         this.userInfoRepository = userInfoRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    //TODO: Handle failed login attempt
     @Transactional
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         UserDetails userDetails = authenticateAndGetUserDetails(request.getEmail(), request.getPassword());
@@ -59,7 +83,7 @@ public class AuthenticationService {
 
         checkEmailAndPhoneNumber(request);
 
-        User user = buildJobSeeker(request);
+        User user = buildUser(request);
 
         User savedUser = userRepository.save(user);
 
@@ -88,8 +112,12 @@ public class AuthenticationService {
                 .map(RefreshToken::getUser)
                 .map(user -> {
                     String newAccessToken = jwtService.generateAccessToken(user);
+
+                    refreshTokenService.revokeRefreshToken(requestRefreshToken);
+                    RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getEmail());
+
                     return TokenRefreshResponse.builder()
-                            .refreshToken(requestRefreshToken)
+                            .refreshToken(newRefreshToken.getToken())
                             .accessToken(newAccessToken)
                             .build();
                 })
@@ -109,20 +137,63 @@ public class AuthenticationService {
         }
     }
 
-    private UserDetails authenticateAndGetUserDetails(String email, String password) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
-        );
+    @Transactional(readOnly = true)
+    public List<DeviceSessionDto> getUserActiveSessions(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return (UserDetails) authentication.getPrincipal();
+        List<RefreshToken> activeSessions = refreshTokenRepository.findActiveTokensByUser(user, Instant.now());
+        return activeSessions.stream()
+                .map(token -> new DeviceSessionDto(
+                        token.getId(),
+                        token.getCreatedAt(),
+                        token.getExpiryDate()
+                ))
+                .collect(Collectors.toList());
     }
 
-    private User buildJobSeeker(RegisterRequest request) {
+    @Transactional
+    public void terminateSession(String email, UUID sessionId) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+
+        RefreshToken token = refreshTokenRepository.findById(sessionId)
+                .orElseThrow(() -> new SessionNotFoundException("Session not found"));
+
+        if (!token.getUser().equals(user)) {
+            throw new AccessDeniedException("You don't have permission to terminate this session");
+        }
+
+        refreshTokenService.revokeTokenById(sessionId);
+    }
+    private UserDetails authenticateAndGetUserDetails(String email, String password) {
+        try{
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, password)
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return (UserDetails) authentication.getPrincipal();
+        } catch (AuthenticationException e){
+            throw new InvalidCredentialsException();
+        }
+    }
+
+    private User buildUser(RegisterRequest request) {
         User user = new User();
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        user.setRole(Role.JOB_SEEKER);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        if (request.getRole() != null) {
+            user.setRole(request.getRole());
+        } else {
+            user.setRole(Role.JOB_SEEKER);
+        }
+
         return user;
     }
 
@@ -136,7 +207,6 @@ public class AuthenticationService {
         userInfo.setUser(user);
         return userInfo;
     }
-
     private void checkEmailExists(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new EmailAlreadyExistsException(email);

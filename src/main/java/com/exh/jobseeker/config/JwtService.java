@@ -17,6 +17,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
@@ -44,8 +45,11 @@ public class JwtService {
     }
 
     public String generateRefreshToken(UserDetails userDetails) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("tokenId", UUID.randomUUID().toString());
+
         return generateToken(
-                new HashMap<>(),
+                extraClaims,
                 userDetails,
                 jwtProperties.getRefreshToken().getSecret(),
                 jwtProperties.getRefreshToken().getExpirationMs()

@@ -3,16 +3,14 @@ package com.exh.jobseeker.model.dto.response;
 public class AuthenticationResponse {
     private String accessToken;
     private String refreshToken;
-    private String tokenType;
 
     public AuthenticationResponse() {
-        this.tokenType = "Bearer";
+
     }
 
-    public AuthenticationResponse(String accessToken, String refreshToken, String tokenType) {
+    public AuthenticationResponse(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.tokenType = tokenType != null ? tokenType : "Bearer";
     }
 
     public String getAccessToken() {
@@ -31,14 +29,6 @@ public class AuthenticationResponse {
         this.refreshToken = refreshToken;
     }
 
-    public String getTokenType() {
-        return tokenType;
-    }
-
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
-    }
-
     public static Builder builder() {
         return new Builder();
     }
@@ -46,7 +36,6 @@ public class AuthenticationResponse {
     public static class Builder {
         private String accessToken;
         private String refreshToken;
-        private String tokenType = "Bearer";
 
         public Builder accessToken(String accessToken) {
             this.accessToken = accessToken;
@@ -58,13 +47,9 @@ public class AuthenticationResponse {
             return this;
         }
 
-        public Builder tokenType(String tokenType) {
-            this.tokenType = tokenType;
-            return this;
-        }
 
         public AuthenticationResponse build() {
-            return new AuthenticationResponse(accessToken, refreshToken, tokenType);
+            return new AuthenticationResponse(accessToken, refreshToken);
         }
     }
 }
