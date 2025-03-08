@@ -31,9 +31,9 @@ public class JobSeeker extends BaseEntity{
     @Column(name = "education_level")
     @Enumerated(EnumType.STRING)
     private EducationLevel educationLevel;
-    @Column(name = "headline")
+    @Column(name = "headline" , length = 1000)
     private String headline;
-    @Column(name = "summary")
+    @Column(name = "summary", length = 3000)
     private String summary;
     @OneToMany(mappedBy = "jobSeeker")
     private Set<JobSeekerSkill> skills;

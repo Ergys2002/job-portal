@@ -14,4 +14,28 @@ public class JobOpeningSkill extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "skill_id", referencedColumnName = "id")
     private Skill skill;
+
+    public JobOpeningSkill() {
+    }
+
+    public JobOpeningSkill(JobOpening jobOpening, Skill skill) {
+        this.jobOpening = jobOpening;
+        this.skill = skill;
+    }
+
+    public JobOpening getJobOpening() {
+        return jobOpening;
+    }
+
+    public void setJobOpening(JobOpening jobOpening) {
+        this.jobOpening = jobOpening;
+    }
+
+    public Skill getSkill() {
+        return skill;
+    }
+
+    public void setSkill(Skill skill) {
+        this.skill = skill;
+    }
 }

@@ -6,7 +6,6 @@ public class ErrorResponse {
     private String message;
     private int status;
     private Instant timestamp;
-    private String path;
 
     public ErrorResponse() {
         this.timestamp = Instant.now();
@@ -19,31 +18,18 @@ public class ErrorResponse {
     public void setMessage(String message) {
         this.message = message;
     }
-
     public int getStatus() {
         return status;
     }
-
     public void setStatus(int status) {
         this.status = status;
     }
-
     public Instant getTimestamp() {
         return timestamp;
     }
-
     public void setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;
     }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
     public static Builder builder() {
         return new Builder();
     }
@@ -67,11 +53,6 @@ public class ErrorResponse {
 
         public Builder timestamp(Instant timestamp) {
             this.errorResponse.setTimestamp(timestamp);
-            return this;
-        }
-
-        public Builder path(String path) {
-            this.errorResponse.setPath(path);
             return this;
         }
 

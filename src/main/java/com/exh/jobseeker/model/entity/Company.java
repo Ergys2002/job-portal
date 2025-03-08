@@ -15,6 +15,8 @@ import org.hibernate.annotations.SQLRestriction;
 public class Company extends BaseEntity{
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(length = 1000)
     private String description;
     private String website;
     @Column(name = "number_of_employees")

@@ -42,12 +42,6 @@ public class ValidationErrorResponse extends ErrorResponse {
             this.validationErrorResponse.setTimestamp(timestamp);
             return this;
         }
-
-        public ValidationErrorResponseBuilder path(String path) {
-            this.validationErrorResponse.setPath(path);
-            return this;
-        }
-
         public ValidationErrorResponseBuilder validationErrors(Map<String, String> validationErrors) {
             this.validationErrorResponse.setValidationErrors(validationErrors);
             return this;
