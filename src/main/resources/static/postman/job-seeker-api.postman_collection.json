@@ -1,0 +1,661 @@
+{
+	"info": {
+		"_postman_id": "c100c32b-bbfe-4fdc-99ba-fa7e2fbd0529",
+		"name": "job-seeker-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26051260"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"ergysxhaollari02@gmail.com\",\r\n    \"password\": \"Ergi123@\",\r\n    \"firstName\": \"Ergys\",\r\n    \"lastName\": \"Xhaollari\",\r\n    \"birthDate\": \"2002-12-01\",\r\n    \"phoneNumber\": \"+355688749829\",\r\n    \"gender\": \"MALE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/auth/register",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    // \"email\": \"elena.popescu@nextstep.al\",\r\n    // \"password\": \"AlbTech87!\"\r\n    \"email\": \"ergysxhaollari02@gmail.com\",\r\n    \"password\": \"Ergi123@\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/auth/login",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmd5c3hoYW9sbGFyaTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0MTU0OTA3NywiZXhwIjoxNzQxNTQ5OTc3fQ.8CgMsAipdJlYuqEIFk6w-mquhpIYRAq3Qs2WOTWZAIU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refreshToken\" : \"1f390336-e089-4727-a155-9bdf7324a0f0\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/auth/logout",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "employer",
+			"item": [
+				{
+					"name": "employers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbGVuYS5wb3Blc2N1QG5leHRzdGVwLmFsIiwiaWF0IjoxNzQxNTQxOTE1LCJleHAiOjE3NDE1NDI4MTV9.EA6zK3_z0E5V4KqKzrYkgGiBAUxbOFt_P8dr4Z6MeJI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"position\": \"Talent Acquisition Director\",\r\n    \"company\": {\r\n        \"name\": \"NextStep Recruitment\",\r\n        \"description\": \"NextStep Recruitment is Albania's premier talent acquisition firm specializing in connecting skilled professionals with forward-thinking companies. We focus on the technology, finance, and healthcare sectors, offering both permanent placement and contract staffing solutions. Our proprietary candidate assessment methodology ensures the perfect match between candidate skills and company culture, resulting in higher retention rates and workplace satisfaction.\",\r\n        \"website\": \"www.nextstep.al\",\r\n        \"numberOfEmployees\": 45,\r\n        \"location\": \"Rruga Ibrahim Rugova, Tirane, Shqiperi\",\r\n        \"foundationYear\": 2017,\r\n        \"industry\": \"Recruitment and HR Solutions\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/employers",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"employers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "employers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJseXJpY2Fsc29uZ3MzMzBAZ21haWwuY29tIiwiaWF0IjoxNzQxMzk0OTA5LCJleHAiOjE3NDEzOTU4MDl9.2whsZlw5W7ErVQym900Bv8LIHR1_7wKMwHMdmCMa2p4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"position\": \"Developer\",\r\n    \"company\": {\r\n        \"name\": \"Lufthansa Industry Solutions\",\r\n        \"description\": \"Lufthansa Industry Solutions is a service provider for IT consulting and system integration. This Lufthansa subsidiary helps its clients with the digital transformation of their companies. Its customer base includes companies both within and outside the Lufthansa Group, as well as more than 200 companies in various lines of business. The company is based in Norderstedt and employs more than 1,600 members of staff at several branch offices in Germany, Switzerland and the USA.\",\r\n        \"website\": \"www.lhind.al\",\r\n        \"numberOfEmployees\": 500,\r\n        \"location\": \"Air Albania Stadium, Tirane, Shqiperi\",\r\n        \"foundationYear\": 2012,\r\n        \"industry\": \"Airlines and Software Development\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/employers",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"employers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE3NDE0NDIwMTcsImV4cCI6MTc0MTQ0MjkxN30.1rpgMEMczafjN90bFK9egJVcWCx1H-IA2kCyEA-1vEc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/users?page=0&size=5",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "EMPLOYER",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "lyricalsongs30@gmail.com",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/{id}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE3NDE0MDQxNTAsImV4cCI6MTc0MTQwNTA1MH0.9wLs53kaYYtfKS65U1egSvqsnSjvhw6rodMz1j71KL4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/users/ece58348-0da1-4dd4-b759-e447871885f9",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"users",
+								"ece58348-0da1-4dd4-b759-e447871885f9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "job",
+			"item": [
+				{
+					"name": "jobs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbGVuYS5wb3Blc2N1QG5leHRzdGVwLmFsIiwiaWF0IjoxNzQxNTQzNDMyLCJleHAiOjE3NDE1NDQzMzJ9.O08IlVDZJh_thg8Ezno3JKREj40UvrPnqvJ-LH8Yk_A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"HR Technology Manager\",\r\n    \"description\": \"Lead our internal HR technology initiatives and advise clients on HR tech solutions. You'll evaluate, implement, and optimize recruitment and talent management platforms while ensuring data security and compliance. The ideal candidate combines HR expertise with strong technical aptitude.\",\r\n    \"workLocationType\": \"ONSITE\",\r\n    \"location\": \"Rruga Ibrahim Rugova, Business Center, Floor 3, Tirane, Shqiperi\",\r\n    \"minSalary\": 75000,\r\n    \"maxSalary\": 100000,\r\n    \"applicationDeadline\": \"2025-06-05T00:00:00Z\",\r\n    \"skills\": [\r\n        {\r\n            \"name\": \"HRIS Systems\"\r\n        },\r\n        {\r\n            \"name\": \"Project Management\"\r\n        },\r\n        {\r\n            \"name\": \"Data Analytics\"\r\n        },\r\n        {\r\n            \"name\": \"HR Compliance\"\r\n        },\r\n        {\r\n            \"name\": \"System Integration\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/jobs",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "jobs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbGVuYS5wb3Blc2N1QG5leHRzdGVwLmFsIiwiaWF0IjoxNzQxNTQzNDMyLCJleHAiOjE3NDE1NDQzMzJ9.O08IlVDZJh_thg8Ezno3JKREj40UvrPnqvJ-LH8Yk_A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/jobs/my-listings?status=ACTIVE",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"jobs",
+								"my-listings"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "ACTIVE"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "jobs/{id}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJseXJpY2Fsc29uZ3MzMEBnbWFpbC5jb20iLCJpYXQiOjE3NDE0NDIyMTcsImV4cCI6MTc0MTQ0MzExN30.LlcwG7u1rZcpHSn2ggMs84RSt7wV2h09kxHQ8leelDc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\" : \"ACTIVE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/jobs/fb3f9c6c-9154-46ff-9e84-fca6ceacffb1",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"jobs",
+								"fb3f9c6c-9154-46ff-9e84-fca6ceacffb1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "jobs/search",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmd5c3hoYW9sbGFyaTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0MTU0Mzc4NywiZXhwIjoxNzQxNTQ0Njg3fQ.9lPXcR0aqETsckBupbbp0rBEr7jbfqtEGu6BWJaY3y0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    // \"title\" : \"senior\",\r\n    // \"workLocationType\" : \"asdas\",\r\n    // \"preferredSalary\" : 150000,\r\n    // \"location\" : \"Usa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/jobs/search?page=0&size=10&createdAt,asc",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"jobs",
+								"search"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "createdAt,asc",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "job-seeker",
+			"item": [
+				{
+					"name": "job-seekers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmd5c3hoYW9sbGFyaTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0MTU0Mzc4NywiZXhwIjoxNzQxNTQ0Njg3fQ.9lPXcR0aqETsckBupbbp0rBEr7jbfqtEGu6BWJaY3y0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "cv",
+									"type": "file",
+									"src": "postman-cloud:///1effd120-1061-4830-b981-8128f4b83ecc"
+								},
+								{
+									"key": "experienceYears",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "educationLevel",
+									"value": "MASTERS_DEGREE",
+									"type": "text"
+								},
+								{
+									"key": "headline",
+									"value": "Full-Stack Engineer, Java, SpringBoot, React, Angular",
+									"type": "text"
+								},
+								{
+									"key": "summary",
+									"value": "Full Stack Java Developer skilled in Spring Boot, Hibernate, JPA, Angular, HTML, CSS, and JavaScript. Passionate about building powerful applications. Seeking opportunities to contribute and learn in a dynamic software development team. Eager to apply my knowledge and grow as a professional in the field.",
+									"type": "text"
+								},
+								{
+									"key": "skills",
+									"value": "Java, SpringBoot",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base-url}}/job-seekers",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"job-seekers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "job-seekers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2JzZWVrZXJAZ21haWwuY29tIiwiaWF0IjoxNzQxNTIyMjU5LCJleHAiOjE3NDE1MjMxNTl9.XcKM-z1kQ3M138dpj5HRPLtLtmIEQkVmZVUVouPF21w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "experienceYears",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "educationLevel",
+									"value": "MASTERS_DEGREE",
+									"type": "text"
+								},
+								{
+									"key": "headline",
+									"value": "Full-Stack Engineer, Java, SpringBoot, React, Angular",
+									"type": "text"
+								},
+								{
+									"key": "summary",
+									"value": "Full Stack Java Developer skilled in Spring Boot, Hibernate, JPA, Angular, HTML, CSS, and JavaScript. Passionate about building powerful applications. Seeking opportunities to contribute and learn in a dynamic software development team. Eager to apply my knowledge and grow as a professional in the field.",
+									"type": "text"
+								},
+								{
+									"key": "skills",
+									"value": "Java, SpringBoot",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base-url}}/job-seekers",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"job-seekers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "job-application",
+			"item": [
+				{
+					"name": "job-applications/{jobOpeningId}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmd5c3hoYW9sbGFyaTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0MTU0Njk3NiwiZXhwIjoxNzQxNTQ3ODc2fQ.CYaRTNqQDHTW9pE4ZX2spT7ktMabgzIXF2LMlSu0PjA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/job-applications/ea5512b1-4c11-4154-8c6f-23a86bfeac4c",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"job-applications",
+								"ea5512b1-4c11-4154-8c6f-23a86bfeac4c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "job-applications/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/job-applications/4b514c19-3c5e-4f00-973b-c2d30b621105",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"job-applications",
+								"4b514c19-3c5e-4f00-973b-c2d30b621105"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "job-applications/search",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmd5c3hoYW9sbGFyaTAyQGdtYWlsLmNvbSIsImlhdCI6MTc0MTU0Njk3NiwiZXhwIjoxNzQxNTQ3ODc2fQ.CYaRTNqQDHTW9pE4ZX2spT7ktMabgzIXF2LMlSu0PjA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/job-applications/search",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"job-applications",
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base-url",
+			"value": "http://localhost:8080/api/v1",
+			"type": "string"
+		}
+	]
+}

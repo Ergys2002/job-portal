@@ -16,6 +16,8 @@ import java.util.Set;
 public class JobOpeningCreateRequest {
     @NotBlank(message = "Title is required")
     private String title;
+
+    @Size(max = 3000, message = "Description must be less than 3000 characters")
     private String description;
     @NotNull(message = "Work location type is required")
     private WorkLocationType workLocationType;
@@ -23,6 +25,8 @@ public class JobOpeningCreateRequest {
     private Double minSalary;
     @Min(value = 0, message = "Max salary must be greater than or equal to 0")
     private Double maxSalary;
+    @NotBlank(message = "Location is required")
+    private String location;
 
     @NotNull(message = "Application deadline is required")
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -59,5 +63,9 @@ public class JobOpeningCreateRequest {
 
     public Set<SkillCreateRequest> getSkills() {
         return skills;
+    }
+
+    public String getLocation() {
+        return location;
     }
 }

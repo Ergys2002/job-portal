@@ -65,4 +65,12 @@ public class Employer extends BaseEntity{
     public void setPosition(String position) {
         this.position = position;
     }
+
+    public Set<JobOpening> getJobOpenings() {
+        return jobOpenings;
+    }
+
+    public void setJobOpenings(Set<JobOpening> jobOpenings) {
+        this.jobOpenings = jobOpenings;
+    }
 }

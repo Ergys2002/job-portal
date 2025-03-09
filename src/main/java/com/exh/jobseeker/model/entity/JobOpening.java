@@ -26,7 +26,7 @@ import java.util.Set;
 public class JobOpening extends BaseEntity{
     @Column(name = "title", nullable = false)
     private String title;
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 3000)
     private String description;
     @Column(name = "work_location_type", nullable = false)
     @Enumerated(EnumType.STRING)

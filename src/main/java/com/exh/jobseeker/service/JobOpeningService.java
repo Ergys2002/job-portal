@@ -85,6 +85,7 @@ public class JobOpeningService {
         jobOpening.setMinSalary(jobOpeningCreateRequest.getMinSalary());
         jobOpening.setMaxSalary(jobOpeningCreateRequest.getMaxSalary());
         jobOpening.setWorkLocationType(jobOpeningCreateRequest.getWorkLocationType());
+        jobOpening.setLocation(jobOpeningCreateRequest.getLocation());
 
         return jobOpening;
     }

@@ -67,6 +67,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(StringToUuidParsingException.class)
+    public ResponseEntity<ErrorResponse> handleStringToUuidParsingException(StringToUuidParsingException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(ex.getMessage())
+                .timestamp(Instant.now())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(SessionNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleSessionNotFoundException(SessionNotFoundException ex) {
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -75,6 +85,16 @@ public class GlobalExceptionHandler {
                 .timestamp(Instant.now())
                 .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(JobSeekerProfileNotCompletedException.class)
+    public ResponseEntity<ErrorResponse> handleJobSeekerProfileNotCompletedException(JobSeekerProfileNotCompletedException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .timestamp(Instant.now())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(AccessDeniedException.class)

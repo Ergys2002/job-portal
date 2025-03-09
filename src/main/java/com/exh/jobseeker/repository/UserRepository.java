@@ -17,7 +17,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     User findByEmail(String email);
 
     boolean existsByEmail(String email);
-//    Optional<User> findById(UUID id);
 
     @Query("SELECT u FROM User u WHERE (:role IS NULL OR u.role = :role) AND (:email IS NULL OR u.email LIKE %:email%) AND u.role != 'ADMIN'")
     Page<User> findUsersByFilters(@Param("role") Role role, @Param("email") String email, Pageable pageable);
